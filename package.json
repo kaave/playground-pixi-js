@@ -21,23 +21,14 @@
     "prettier:style": "prettier --write 'src/**/*.css'",
     "prettier:script": "eslint --ext .ts --fix 'src/**/*.ts'",
     "prettier:json": "prettier --write 'src/**/*.json'",
-    "prettier:vue": "eslint --ext .vue --fix 'src/**/*.vue'",
     "lint": "run-p lint:*",
     "lint:style": "stylelint 'src/**/*.css'",
     "lint:script": "eslint --ext .ts 'src/**/*.ts'",
-    "lint:vue": "run-p lint:vue:*",
-    "lint:vue:style": "stylelint --config .vue.stylelintrc 'src/**/*.vue'",
-    "lint:vue:script": "eslint --ext .vue 'src/**/*.vue'",
     "precommit": "run-s safe-guard",
     "tsc": "tsc"
   },
   "browserslist": [
-    "ie 11",
-    "ios >= 10",
-    "android >= 4.4",
-    "> 1% in JP",
-    "not ie <= 10",
-    "not chrome 49"
+    "> 1% in JP"
   ],
   "lint-staged": {
     "subTaskConcurrency": 1,
@@ -55,18 +46,11 @@
       "*.json": [
         "prettier:json",
         "git add src/**/*.json"
-      ],
-      "*.vue": [
-        "prettier:vue",
-        "lint:vue:style",
-        "lint:vue:script",
-        "git add src/**/*.vue"
       ]
     }
   },
   "devDependencies": {
     "@types/jest": "^22.1.2",
-    "@vue/test-utils": "^1.0.0-beta.11",
     "autoprefixer": "^7.2.6",
     "browser-sync": "^2.23.6",
     "browser-sync-webpack-plugin": "^2.0.1",
@@ -81,7 +65,6 @@
     "eslint-import-resolver-webpack": "^0.8.4",
     "eslint-plugin-prettier": "^2.6.0",
     "eslint-plugin-typescript": "^0.8.1",
-    "eslint-plugin-vue": "^4.2.2",
     "extract-text-webpack-plugin": "^3.0.2",
     "globby": "^7.1.1",
     "handlebars": "^4.0.11",
@@ -93,7 +76,6 @@
     "imagemin-mozjpeg": "^7.0.0",
     "imagemin-webpack-plugin": "^2.0.0",
     "jest": "^22.2.2",
-    "jest-vue-preprocessor": "^1.3.1",
     "lint-staged": "^6.1.0",
     "npm-run-all": "^4.1.2",
     "postcss-color-hex-alpha": "^3.0.0",
@@ -119,10 +101,6 @@
     "typescript": "^2.7.1",
     "typescript-eslint-parser": "^13.0.0",
     "url-loader": "^0.6.2",
-    "vue-eslint-parser": "^2.0.2",
-    "vue-jest": "^2.1.0",
-    "vue-loader": "^14.1.1",
-    "vue-template-compiler": "^2.5.13",
     "webpack": "^3.10.0",
     "webpack-dashboard": "^1.1.1",
     "webpack-dev-server": "^2.11.1"
@@ -130,8 +108,6 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "libraries-frontend-framelunch": "framelunch/libraries-frontend-framelunch#0.3.2",
-    "sanitize.css": "^5.0.0",
-    "vue": "^2.5.13",
-    "vue-property-decorator": "^6.0.0"
+    "sanitize.css": "^5.0.0"
   }
 }

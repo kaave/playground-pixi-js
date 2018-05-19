@@ -63,17 +63,14 @@ module.exports = {
     modules: [
       'node_modules',
     ],
-    extensions: ['json', '.vue', '.ts', '.js'],
+    extensions: ['json', '.ts', '.js'],
   },
   module: {
     rules: [
       {
-        test: /\.ts$/,
+        test: /\.tsx?$/,
         exclude: /node_modules/,
         loader: 'ts-loader',
-        options: {
-          appendTsSuffixTo: [/\.vue$/],
-        },
       },
       {
         test: /\.hbs$/,

@@ -11,13 +11,6 @@ const viewData = require(path.join(paths.view, '/data.json'));
 
 const appendRules = [
   {
-    test: /\.vue$/,
-    loader: 'vue-loader',
-    options: {
-      extractCSS: true
-    },
-  },
-  {
     test: /\.css$/,
     use: ExtractTextPlugin.extract({
       fallback: 'style-loader',

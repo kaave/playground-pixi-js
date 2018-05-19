@@ -2,16 +2,8 @@
   "parserOptions": {
     "parser": "typescript-eslint-parser"
   },
-  "plugins": [
-    "typescript",
-    "prettier"
-  ],
-  "extends": [
-    "framelunch",
-    "typescript",
-    "plugin:vue/recommended",
-    "prettier"
-  ],
+  "plugins": ["typescript", "prettier"],
+  "extends": ["framelunch", "typescript", "prettier"],
   "settings": {
     "import/resolver": {
       "webpack": {
@@ -46,21 +38,5 @@
      * with prettier
      */
     "prettier/prettier": "warn"
-  },
-  "overrides": {
-    "files": "src/scripts/**/*.vue",
-    "rules": {
-      "no-unused-vars": "off",
-      /*
-       * vue
-       */
-      "vue/max-attributes-per-line": ["error", {
-        "singleline": 3,
-        "multiline": {
-          "max": 1,
-          "allowFirstLine": false
-        }
-      }]
-    }
   }
 }

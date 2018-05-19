@@ -9,10 +9,6 @@ const viewData = require(path.join(paths.view, '/data.json'));
 
 const appendRules = [
   {
-    test: /\.vue$/,
-    loader: 'vue-loader',
-  },
-  {
     test: /\.css$/,
     use: [
       'style-loader',

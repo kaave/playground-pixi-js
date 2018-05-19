@@ -3,14 +3,8 @@
  * e.g. polyfill, RxJS
  */
 import 'babel-polyfill';
-import Vue from 'vue';
 
 import * as Configs from './config';
-
-/*
- * add vue configs
- */
-Vue.config.productionTip = false;
 
 /*
  * add browser prefix

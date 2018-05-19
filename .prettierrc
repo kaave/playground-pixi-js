@@ -15,6 +15,3 @@ overrides:
   options:
     tabWidth: 4
     singleQuote: false
-- files: "*.vue"
-  options:
-    parser: vue
