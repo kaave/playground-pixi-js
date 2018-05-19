@@ -17,10 +17,10 @@
     "test": "cross-env NODE_ENV=test jest",
     "test:watch": "cross-env NODE_ENV=test jest --watch",
     "safe-guard": "lint-staged",
-    "prettier": "run-p prettier:*",
-    "prettier:style": "prettier --write 'src/**/*.css'",
-    "prettier:script": "eslint --ext .ts --fix 'src/**/*.ts'",
-    "prettier:json": "prettier --write 'src/**/*.json'",
+    "fix": "run-p fix:*",
+    "fix:style": "prettier --write 'src/**/*.css'",
+    "fix:script": "eslint --ext .ts --fix 'src/**/*.ts'",
+    "fix:json": "prettier --write 'src/**/*.json'",
     "lint": "run-p lint:*",
     "lint:style": "stylelint 'src/**/*.css'",
     "lint:script": "eslint --ext .ts 'src/**/*.ts'",
@@ -34,18 +34,17 @@
     "subTaskConcurrency": 1,
     "linters": {
       "*.ts": [
-        "prettier:script",
-        "lint:script",
-        "git add src/**/*.ts"
+        "eslint --fix",
+        "git add"
       ],
       "*.css": [
-        "prettier:style",
-        "lint:style",
-        "git add src/**/*.css"
+        "prettier --write",
+        "stylelint",
+        "git add"
       ],
       "*.json": [
-        "prettier:json",
-        "git add src/**/*.json"
+        "prettier --write",
+        "git add"
       ]
     }
   },
