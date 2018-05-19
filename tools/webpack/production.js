@@ -37,7 +37,6 @@ module.exports = {
       [{ from: paths.assets }],
       { ignore: [
         '.DS_Store',
-        'vendor-manifest.json',
       ] }
     ),
     new ImageminPlugin({

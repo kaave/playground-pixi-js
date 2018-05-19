@@ -4,12 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "postinstall": "cross-env NODE_ENV=development webpack --progress --config tools/webpack/dll.js",
     "start": "webpack-dashboard -c cyan -- npm run start:plain",
     "start:plain": "cross-env NODE_ENV=development webpack-dev-server --inline --hot --history-api-fallback --progress --color --config tools/webpack/development.js",
-    "build": "run-s clean build:dll build:source",
+    "build": "run-s clean build:source",
     "build:source": "cross-env NODE_ENV=production webpack --progress --config tools/webpack/production.js",
-    "build:dll": "cross-env NODE_ENV=production webpack --progress --config tools/webpack/dll.js",
     "build:check": "run-s build server",
     "build:diff": "node tools/getBuildDiff",
     "clean": "rimraf build",

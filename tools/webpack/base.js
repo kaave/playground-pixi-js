@@ -10,7 +10,6 @@ const paths = {
   view: path.join(process.cwd(), 'src', 'views'),
 };
 paths.lib = path.join(paths.assets, 'lib');
-paths.dllManifest = path.join(paths.lib, 'vendor-manifest.json');
 
 const imageMin = {
   png: {
@@ -39,15 +38,6 @@ const imageMin = {
 const entry = {
   index: path.join(paths.script, 'index.ts'),
 };
-
-const manifest = (() => {
-  try {
-    fs.statSync(paths.dllManifest);
-    return require(paths.dllManifest);
-  } catch (_error) {
-    return {};
-  }
-})();
 
 module.exports = {
   /*
@@ -119,10 +109,6 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-    }),
-    new webpack.DllReferencePlugin({
-      manifest,
-      context: process.cwd(),
     }),
   ],
 
