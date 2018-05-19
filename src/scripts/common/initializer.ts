@@ -3,6 +3,7 @@
  * e.g. polyfill, RxJS
  */
 import 'babel-polyfill';
+import 'tslib';
 
 import * as Configs from './config';
 
