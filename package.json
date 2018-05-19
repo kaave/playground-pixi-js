@@ -14,6 +14,7 @@
     "server": "cross-env NODE_ENV=production http-server ./build -p 23000 -o --cors",
     "test": "cross-env NODE_ENV=test jest",
     "test:watch": "cross-env NODE_ENV=test jest --watch",
+    "typecheck": "tsc --noEmit",
     "safe-guard": "lint-staged",
     "fix": "run-p fix:*",
     "fix:style": "prettier --write 'src/**/*.css'",
