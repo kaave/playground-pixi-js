@@ -53,7 +53,7 @@ module.exports = {
     modules: [
       'node_modules',
     ],
-    extensions: ['json', '.ts', '.js'],
+    extensions: ['json', '.tsx', '.ts', '.js'],
   },
   module: {
     rules: [

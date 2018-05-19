@@ -24,6 +24,7 @@ const appendRules = [
 ];
 
 module.exports = {
+  mode: 'development',
   entry: Object.entries(entry).reduce((tmp, [key, value]) => {
     tmp[key] = [
       'webpack-dev-server/client?http://localhost:13000',

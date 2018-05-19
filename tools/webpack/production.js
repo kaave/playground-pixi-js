@@ -28,6 +28,7 @@ const appendRules = [
 ];
 
 module.exports = {
+  mode: 'production',
   entry,
   output,
   resolve,
@@ -61,7 +62,6 @@ module.exports = {
       },
       conf: Object.assign({ viewPath: paths.view, isProduction: true }, viewData.common, viewData[filename] ? viewData[filename] : {}),
     })),
-    new webpack.optimize.UglifyJsPlugin(),
   ],
   module: {
     rules: [...rules, ...appendRules],
