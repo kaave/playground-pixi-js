@@ -1,1 +1,12 @@
+@import "sanitize.css";
 @import "./common/_global.css";
+
+body {
+    height: 300vh;
+}
+
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+}

@@ -1,1 +1,1 @@
-# Playground frontend
+# Playground Pixi.js
