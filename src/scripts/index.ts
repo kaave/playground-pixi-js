@@ -3,6 +3,7 @@ import * as PIXI from 'pixi.js';
 import Easing from 'bezier-easing';
 
 import '../styles/index.css';
+import Invert from './filters/Glow';
 
 PIXI.utils.skipHello();
 const easeInOutQuart = Easing(0.86, 0, 0.07, 1);
@@ -13,6 +14,7 @@ class Main {
   stage: PIXI.Container;
   filters?: {
     blur: PIXI.filters.BlurFilter;
+    invert: Invert;
   };
   sprites: PIXI.Sprite[];
   animatePixels: number[];
@@ -51,6 +53,7 @@ class Main {
       });
       this.filters = {
         blur: new PIXI.filters.BlurFilter(),
+        invert: new Invert(),
       };
       this.filters.blur.quality = 2.5;
 
@@ -65,7 +68,16 @@ class Main {
 
     document.body.appendChild(this.renderer.view);
 
-    this.startAnimation(this.animationReverse);
+    setInterval(() => {
+      if (this.filters) {
+        const setValue = Math.random() * 10;
+        console.log(setValue);
+        this.filters.invert.blur = setValue;
+        this.renderer.render(this.stage);
+      }
+    }, 100);
+
+    // this.startAnimation(this.animationReverse);
   }
 
   onScroll() {
