@@ -3,7 +3,7 @@ import * as PIXI from 'pixi.js';
 
 import '../styles/index.css';
 
-const sliceLength = 5;
+const sliceLength = 20;
 class Main {
   renderer: PIXI.WebGLRenderer | PIXI.CanvasRenderer;
   stage: PIXI.Container;
@@ -13,6 +13,7 @@ class Main {
   sprites: PIXI.Sprite[];
 
   constructor() {
+    this.animate = this.animate.bind(this);
     this.onScroll = this.onScroll.bind(this);
     this.renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight);
     this.stage = new PIXI.Container();
@@ -21,23 +22,22 @@ class Main {
     const spriteWidth = this.renderer.width / sliceLength;
     PIXI.loader.add({ name: 'unsplash', url: '4.jpg' }).load(() => {
       const container = new PIXI.Container();
-      Object.values(PIXI.loader.resources).forEach(resource => {
-        const textureWidth = resource.texture.width;
-        const textureHeight = resource.texture.height;
-        [...Array(sliceLength).keys()].forEach(i => {
-          resource.texture.frame = new PIXI.Rectangle(
-            textureWidth / sliceLength * i,
-            0,
-            textureWidth / sliceLength,
-            textureHeight,
-          );
-          const sprite = new PIXI.Sprite(resource.texture);
-          sprite.position.set(spriteWidth * i, 0);
-          sprite.width = spriteWidth;
-          sprite.height = this.renderer.height;
-          container.addChild(sprite);
-          this.sprites.push(sprite);
-        });
+      const resource = PIXI.loader.resources.unsplash;
+      [...Array(sliceLength).keys()].forEach(i => {
+        const texture = resource.texture.clone();
+        const sprite = new PIXI.Sprite(resource.texture.clone());
+        sprite.position.set(spriteWidth * i, 0);
+        sprite.width = this.renderer.width;
+        sprite.height = this.renderer.height;
+        sprite.texture.frame = new PIXI.Rectangle(
+          texture.width / sliceLength * i,
+          0,
+          texture.width / sliceLength,
+          texture.height,
+        );
+
+        container.addChild(sprite);
+        this.sprites.push(sprite);
       });
       this.filters = {
         blur: new PIXI.filters.BlurFilter(),
@@ -54,6 +54,8 @@ class Main {
     this.renderer.autoResize = true;
 
     document.body.appendChild(this.renderer.view);
+
+    requestAnimationFrame(this.animate);
   }
 
   onScroll() {
@@ -70,6 +72,13 @@ class Main {
 
   updateRenderer() {
     this.renderer.render(this.stage);
+  }
+
+  animate(time: number) {
+    this.sprites.forEach((sprite, index) => (sprite.y = index % 2 === 0 ? sprite.y + 1 : sprite.y - 1));
+    console.log(new Date(), time);
+    this.updateRenderer();
+    requestAnimationFrame(this.animate);
   }
 }
 
