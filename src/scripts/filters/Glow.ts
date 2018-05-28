@@ -58,6 +58,5 @@ export default class extends Filter<Props> {
 
   constructor(args: Args = {}) {
     super(undefined, fragment, { ...args, ...defaultProps } as any);
-    console.log({ ...args, ...defaultProps });
   }
 }

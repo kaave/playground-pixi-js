@@ -3,7 +3,7 @@ import * as PIXI from 'pixi.js';
 import Easing from 'bezier-easing';
 
 import '../styles/index.css';
-import Invert from './filters/Glow';
+import Invert from './filters/Twist';
 
 PIXI.utils.skipHello();
 const easeInOutQuart = Easing(0.86, 0, 0.07, 1);
@@ -70,12 +70,13 @@ class Main {
 
     setInterval(() => {
       if (this.filters) {
-        const setValue = Math.random() * 10;
+        const setValue = Math.random();
         console.log(setValue);
-        this.filters.invert.blur = setValue;
+        // this.filters.invert.blurX = setValue * 10;
+        // this.filters.invert.blurY = Math.random() * 10;
         this.renderer.render(this.stage);
       }
-    }, 100);
+    }, 1000 / 24);
 
     // this.startAnimation(this.animationReverse);
   }
@@ -85,10 +86,10 @@ class Main {
   }
 
   updateFilter() {
-    const heightRate = window.pageYOffset / document.body.getBoundingClientRect().height;
-    if (this.filters) {
-      this.filters.blur.blur = heightRate * 10;
-    }
+    // const heightRate = window.pageYOffset / document.body.getBoundingClientRect().height;
+    // if (this.filters) {
+    //   // this.filters.blur.blur = heightRate * 10;
+    // }
     this.updateRenderer();
   }
 
