@@ -101,7 +101,7 @@ module.exports = {
         use: 'svg-inline-loader'
       },
       {
-        test: /\.(txt|md)$/,
+        test: /\.(txt|md|frag)$/,
         use: 'raw-loader'
       },
     ],

@@ -1,22 +1,6 @@
 import { Filter, UniformData } from 'pixi.js';
 
-const fragment = `
-precision mediump float;
-uniform sampler2D uSampler;
-uniform float rand;
-uniform float val1;
-uniform float val2;
-uniform vec4 dimensions;
-varying vec2 vTextureCoord;
-void main (void)
-{
-   vec2 pos = vTextureCoord * vec2(dimensions);
-   vec2 posOffset = pos + vec2(floor(sin(pos.y / val1 * rand + rand * rand)) * val2 * rand, 0);
-   posOffset = posOffset / vec2(dimensions);
-   vec4 col = texture2D(uSampler, posOffset);
-   gl_FragColor.rgba = col.rgba;
-}
-`;
+import fragment from './shaders/cutSlider.frag';
 
 export interface Props {
   rand: UniformData<number>;
@@ -41,32 +25,26 @@ const defaultProps: Props = {
 
 export default class extends Filter<Props> {
   get rand() {
-    // FIXME: invalid type?
     return (this.uniforms.rand as any) as number;
   }
 
   set rand(value: number) {
-    // FIXME: invalid type?
     (this.uniforms.rand as any) = value;
   }
 
   get val1() {
-    // FIXME: invalid type?
     return (this.uniforms.val1 as any) as number;
   }
 
   set val1(value: number) {
-    // FIXME: invalid type?
     (this.uniforms.val1 as any) = value;
   }
 
   get val2() {
-    // FIXME: invalid type?
     return (this.uniforms.val2 as any) as number;
   }
 
   set val2(value: number) {
-    // FIXME: invalid type?
     (this.uniforms.val2 as any) = value;
   }
 

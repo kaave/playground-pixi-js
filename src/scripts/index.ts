@@ -13,7 +13,6 @@ class Main {
   renderer: PIXI.WebGLRenderer | PIXI.CanvasRenderer;
   stage: PIXI.Container;
   filters?: {
-    blur: PIXI.filters.BlurFilter;
     invert: Invert;
   };
   sprites: PIXI.Sprite[];
@@ -32,7 +31,7 @@ class Main {
     this.animationReverse = false;
 
     const spriteWidth = this.renderer.width / sliceLength;
-    PIXI.loader.add({ name: 'unsplash', url: '4.jpg' }).load(() => {
+    PIXI.loader.add({ name: 'unsplash', url: '1.jpg' }).load(() => {
       const container = new PIXI.Container();
       const resource = PIXI.loader.resources.unsplash;
       [...Array(sliceLength).keys()].forEach(i => {
@@ -52,13 +51,14 @@ class Main {
         this.sprites.push(sprite);
       });
       this.filters = {
-        blur: new PIXI.filters.BlurFilter(),
+        // blur: new PIXI.filters.BlurFilter(),
         invert: new Invert(),
       };
-      this.filters.blur.quality = 2.5;
+      // this.filters.blur.quality = 2.5;
 
-      container.filters = Object.values(this.filters);
+      // container.filters = Object.values(this.filters);
       this.stage.addChild(container);
+      this.stage.filters = Object.values(this.filters);
       this.updateFilter();
       this.updateRenderer();
       window.addEventListener('scroll', this.onScroll);
@@ -68,15 +68,15 @@ class Main {
 
     document.body.appendChild(this.renderer.view);
 
-    setInterval(() => {
-      if (this.filters) {
-        const setValue = Math.random();
-        console.log(setValue);
-        // this.filters.invert.blurX = setValue * 10;
-        // this.filters.invert.blurY = Math.random() * 10;
-        this.renderer.render(this.stage);
-      }
-    }, 1000 / 24);
+    // setInterval(() => {
+    //   if (this.filters) {
+    //     const setValue = Math.random();
+    //     // console.log(setValue);
+    //     this.filters.invert.blurX = setValue * 10;
+    //     this.filters.invert.blurY = Math.random() * 10;
+    //     this.renderer.render(this.stage);
+    //   }
+    // }, 1000 / 24);
 
     // this.startAnimation(this.animationReverse);
   }
