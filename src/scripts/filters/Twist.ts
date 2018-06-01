@@ -21,12 +21,12 @@ interface Args {
 const defaultProps: Props = {
   rand: { type: '1f', value: 0.5 },
   timer: { type: '1f', value: 0 },
-  val2: { type: '1f', value: 5 },
+  val2: { type: '1f', value: 25 },
   val3: { type: '1f', value: 55 },
   // dimensions: { type: '4fv', value: [0, 0, 0, 0] }, // no effect
   dimensions: {
     type: '4fv',
-    value: [1000, 500, 500, 500],
+    value: [1000, 1000, 1000, 1000],
   },
 };
 

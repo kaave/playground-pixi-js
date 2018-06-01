@@ -55,9 +55,9 @@ class Main {
         invert: new Invert(),
       };
 
-      container.filters = Object.values(this.filters);
+      // container.filters = Object.values(this.filters);
       this.stage.addChild(container);
-      // this.stage.filters = Object.values(this.filters);
+      this.stage.filters = Object.values(this.filters);
       this.updateFilter();
       this.updateRenderer();
       window.addEventListener('scroll', this.onScroll);
@@ -67,15 +67,13 @@ class Main {
 
     document.body.appendChild(this.renderer.view);
 
-    // setInterval(() => {
-    //   if (this.filters) {
-    //     const setValue = Math.random();
-    //     // console.log(setValue);
-    //     this.filters.invert.blurX = setValue * 10;
-    //     this.filters.invert.blurY = Math.random() * 10;
-    //     this.renderer.render(this.stage);
-    //   }
-    // }, 1000 / 24);
+    setInterval(() => {
+      if (this.filters) {
+        // const setValue = Math.random();
+        this.filters.invert.timer += 1;
+        this.renderer.render(this.stage);
+      }
+    }, 1000 / 24);
 
     // this.startAnimation(this.animationReverse);
   }
