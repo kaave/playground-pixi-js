@@ -16,7 +16,11 @@ interface Args {
 
 const defaultProps: Props = {
   blur: { type: '1i', value: 15 },
-  dimensions: { type: '4fv', value: [0, 0, 0, 0] },
+  // dimensions: { type: '4fv', value: [0, 0, 0, 0] }, // no effect
+  dimensions: {
+    type: '4fv',
+    value: [10, 5, 5, 5],
+  },
 };
 
 export default class extends Filter<Props> {
@@ -29,6 +33,6 @@ export default class extends Filter<Props> {
   }
 
   constructor(args: Args = {}) {
-    super(undefined, fragment, { ...args, ...defaultProps } as any);
+    super(undefined, fragment, { ...defaultProps, ...args } as any);
   }
 }

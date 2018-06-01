@@ -17,10 +17,19 @@ interface Args {
 }
 
 const defaultProps: Props = {
-  rand: { type: '1f', value: 5 },
+  rand: { type: '1f', value: 500 },
   val1: { type: '1f', value: 150 },
   val2: { type: '1f', value: 20 },
-  dimensions: { type: '4fv', value: [0, 0, 0, 0] },
+  dimensions: { type: '4fv', value: [0, 0, 0, 0] }, // no effect
+  // dimensions: {
+  //   type: '4fv',
+  //   value: [
+  //     Math.floor(Math.random() * 200),
+  //     Math.floor(Math.random() * 200),
+  //     Math.floor(Math.random() * 200),
+  //     Math.floor(Math.random() * 200),
+  //   ],
+  // },
 };
 
 export default class extends Filter<Props> {
@@ -49,6 +58,6 @@ export default class extends Filter<Props> {
   }
 
   constructor(args: Args = {}) {
-    super(undefined, fragment, { ...args, ...defaultProps } as any);
+    super(undefined, fragment, { ...defaultProps, ...args } as any);
   }
 }

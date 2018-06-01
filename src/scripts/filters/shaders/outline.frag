@@ -1,10 +1,8 @@
-// FIXME: no effect
-
 precision mediump float;
 uniform sampler2D uSampler;
 uniform vec4 dimensions;
 varying vec2 vTextureCoord;
-const int step = 5;
+const int step = 5; // TODO: convert to argv
 
 void main (void) {
   vec2 pos = vTextureCoord * vec2(dimensions);

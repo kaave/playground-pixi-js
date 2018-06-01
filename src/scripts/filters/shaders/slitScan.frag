@@ -1,5 +1,3 @@
-// FIXME: black out
-
 precision mediump float;
 uniform float rand;
 uniform vec4 dimensions;

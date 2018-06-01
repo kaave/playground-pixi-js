@@ -31,9 +31,10 @@ class Main {
     this.animationReverse = false;
 
     const spriteWidth = this.renderer.width / sliceLength;
-    PIXI.loader.add({ name: 'unsplash', url: '1.jpg' }).load(() => {
+    PIXI.loader.add({ name: 'unsplash', url: '2.jpg' }).load(() => {
       const container = new PIXI.Container();
       const resource = PIXI.loader.resources.unsplash;
+      console.log(resource.texture.width, resource.texture.height);
       [...Array(sliceLength).keys()].forEach(i => {
         const texture = resource.texture.clone();
         const sprite = new PIXI.Sprite(resource.texture.clone());
@@ -51,14 +52,12 @@ class Main {
         this.sprites.push(sprite);
       });
       this.filters = {
-        // blur: new PIXI.filters.BlurFilter(),
         invert: new Invert(),
       };
-      // this.filters.blur.quality = 2.5;
 
-      // container.filters = Object.values(this.filters);
+      container.filters = Object.values(this.filters);
       this.stage.addChild(container);
-      this.stage.filters = Object.values(this.filters);
+      // this.stage.filters = Object.values(this.filters);
       this.updateFilter();
       this.updateRenderer();
       window.addEventListener('scroll', this.onScroll);

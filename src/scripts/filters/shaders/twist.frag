@@ -1,5 +1,3 @@
-// FIXME: black out
-
 precision mediump float;
 uniform sampler2D uSampler;
 uniform float rand;

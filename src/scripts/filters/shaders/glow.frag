@@ -1,13 +1,11 @@
-// FIXME: no effect
-
 precision mediump float;
 uniform vec4 dimensions;
 uniform sampler2D uSampler;
 uniform int blur;
 varying vec2 vTextureCoord;
 const float strength = 1.3;
-void main (void)
-{
+
+void main (void) {
   vec2 pos = vTextureCoord * vec2(dimensions);
   vec4 col = texture2D(uSampler, vTextureCoord);
   vec4 gws = vec4(0.0, 0.0, 0.0, 1.0);

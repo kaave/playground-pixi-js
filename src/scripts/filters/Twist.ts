@@ -23,7 +23,11 @@ const defaultProps: Props = {
   timer: { type: '1f', value: 0 },
   val2: { type: '1f', value: 5 },
   val3: { type: '1f', value: 55 },
-  dimensions: { type: '4fv', value: [0, 0, 0, 0] },
+  // dimensions: { type: '4fv', value: [0, 0, 0, 0] }, // no effect
+  dimensions: {
+    type: '4fv',
+    value: [1000, 500, 500, 500],
+  },
 };
 
 export default class extends Filter<Props> {
@@ -56,11 +60,10 @@ export default class extends Filter<Props> {
   }
 
   set timer(value: number) {
-    // FIXME: invalid type?
     (this.uniforms.timer as any) = value;
   }
 
   constructor(args: Args = {}) {
-    super(undefined, fragment, { ...args, ...defaultProps } as any);
+    super(undefined, fragment, { ...defaultProps, ...args } as any);
   }
 }

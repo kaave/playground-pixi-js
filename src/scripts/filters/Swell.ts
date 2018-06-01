@@ -17,7 +17,11 @@ interface Args {
 const defaultProps: Props = {
   rand: { type: '1f', value: 0.5 },
   timer: { type: '1f', value: 0 },
-  dimensions: { type: '4fv', value: [0, 0, 0, 0] },
+  // dimensions: { type: '4fv', value: [0, 0, 0, 0] }, // no effect
+  dimensions: {
+    type: '4fv',
+    value: [1000, 500, 500, 500],
+  },
 };
 
 export default class extends Filter<Props> {
@@ -38,6 +42,6 @@ export default class extends Filter<Props> {
   }
 
   constructor(args: Args = {}) {
-    super(undefined, fragment, { ...args, ...defaultProps } as any);
+    super(undefined, fragment, { ...defaultProps, ...args } as any);
   }
 }
