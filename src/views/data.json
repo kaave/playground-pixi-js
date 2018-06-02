@@ -19,5 +19,19 @@
             "site": "http://aaa.com"
         },
         "ga": "__GA__"
+    },
+    "filter": {
+        "title": "slice",
+        "description": "This is top page",
+        "styles": ["/css/index.css"],
+        "scripts": ["/js/filter.js"],
+        "metaImage": "https://dummyimage.com/600x400/333/ddd.png&text=Dummy+image"
+    },
+    "slice": {
+        "title": "slice",
+        "description": "This is top page",
+        "styles": ["/css/index.css"],
+        "scripts": ["/js/slice.js"],
+        "metaImage": "https://dummyimage.com/600x400/333/ddd.png&text=Dummy+image"
     }
 }

@@ -37,6 +37,8 @@ const imageMin = {
 
 const entry = {
   index: path.join(paths.script, 'index.ts'),
+  filter: path.join(paths.script, 'filter.ts'),
+  slice: path.join(paths.script, 'slice.ts'),
 };
 
 module.exports = {
