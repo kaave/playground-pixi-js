@@ -17,10 +17,10 @@ interface Args {
 }
 
 const defaultProps: Props = {
-  rand: { type: '1f', value: 500 },
-  val1: { type: '1f', value: 150 },
+  rand: { type: '1f', value: 5 },
+  val1: { type: '1f', value: 5 },
   val2: { type: '1f', value: 20 },
-  dimensions: { type: '4fv', value: [0, 0, 0, 0] }, // no effect
+  dimensions: { type: '4fv', value: [50, 50, 0, 0] }, // no effect
   // dimensions: {
   //   type: '4fv',
   //   value: [
@@ -56,6 +56,38 @@ export default class extends Filter<Props> {
   set val2(value: number) {
     (this.uniforms.val2 as any) = value;
   }
+
+  get dimensionX() {
+    return (this.uniforms.dimensions as any)[0] as number;
+  }
+
+  set dimensionX(value: number) {
+    (this.uniforms.dimensions as any)[0] = value;
+  }
+
+  get dimensionY() {
+    return (this.uniforms.dimensions as any)[1] as number;
+  }
+
+  set dimensionY(value: number) {
+    (this.uniforms.dimensions as any)[1] = value;
+  }
+
+  // get dimensionZ() {
+  //   return (this.uniforms.dimensions as any)[2] as number;
+  // }
+
+  // set dimensionZ(value: number) {
+  //   (this.uniforms.dimensions as any)[2] = value;
+  // }
+
+  // get dimensionA() {
+  //   return (this.uniforms.dimensions as any)[3] as number;
+  // }
+
+  // set dimensionA(value: number) {
+  //   (this.uniforms.dimensions as any)[3] = value;
+  // }
 
   constructor(args: Args = {}) {
     super(undefined, fragment, { ...defaultProps, ...args } as any);

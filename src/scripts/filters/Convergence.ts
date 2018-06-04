@@ -14,15 +14,9 @@ interface Args {
 
 const defaultProps = {
   rand: { type: '1f', value: 0.5 },
-  // dimensions: { type: '4fv', value: [0, 0, 0, 0] },  // no effect
   dimensions: {
     type: '4fv',
-    value: [
-      Math.floor(Math.random() * 1000),
-      Math.floor(Math.random() * 1000),
-      Math.floor(Math.random() * 1000),
-      Math.floor(Math.random() * 1000),
-    ],
+    value: [300, 300, 0, 0],
   },
 };
 
@@ -35,9 +29,23 @@ export default class extends Filter<Props> {
     (this.uniforms.rand as any) = value;
   }
 
+  get dimensionX() {
+    return (this.uniforms.dimensions as any)[0] as number;
+  }
+
+  set dimensionX(value: number) {
+    (this.uniforms.dimensions as any)[0] = value;
+  }
+
+  get dimensionY() {
+    return (this.uniforms.dimensions as any)[1] as number;
+  }
+
+  set dimensionY(value: number) {
+    (this.uniforms.dimensions as any)[1] = value;
+  }
+
   constructor(args: Args = {}) {
-    // TODO: used any
-    console.log(defaultProps, args, { ...defaultProps, ...args });
     super(undefined, fragment, { ...defaultProps, ...args } as any);
   }
 }

@@ -2,11 +2,11 @@
 @import "./common/_global.css";
 
 body {
-    height: 300vh;
+    /* height: 300vh; */
 }
 
 canvas {
-    position: fixed;
+    /* position: fixed; */
     top: 0;
     left: 0;
 }

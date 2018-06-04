@@ -49,6 +49,7 @@
   },
   "devDependencies": {
     "@types/bezier-easing": "^2.0.0",
+    "@types/dat.gui": "^0.7.0",
     "@types/jest": "^22.1.2",
     "@types/pixi.js": "^4.7.3",
     "autoprefixer": "^7.2.6",
@@ -105,6 +106,7 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "bezier-easing": "^2.0.3",
+    "dat.gui": "^0.7.2",
     "libraries-frontend-framelunch": "framelunch/libraries-frontend-framelunch#0.3.2",
     "pixi.js": "^4.7.3",
     "sanitize.css": "^5.0.0",
