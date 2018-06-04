@@ -18,9 +18,6 @@ class Main {
     PIXI.loader.add({ name: 'unsplash', url: '2.jpg' }).load(this.onImageLoad.bind(this));
     this.renderer.autoResize = true;
     document.body.appendChild(this.renderer.view);
-
-    this.setAnimation();
-    this.setFilters();
   }
 
   setFilters() {
@@ -57,5 +54,6 @@ class Main {
 
 window.addEventListener('DOMContentLoaded', () => {
   const main = new Main();
-  console.log(main);
+  main.setAnimation();
+  main.setFilters();
 });
