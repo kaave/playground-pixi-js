@@ -7,7 +7,7 @@ import BlueInvert from './filters/BlueInvert';
 import BlueRaise from './filters/BlueRaise';
 import Convergence from './filters/Convergence';
 import CutSlider from './filters/CutSlider';
-// import Glow from './filters/Glow';
+import Glow from './filters/Glow';
 import GreenInvert from './filters/GreenInvert';
 import GreenRaise from './filters/GreenRaise';
 import HighContrast from './filters/HighContrast';
@@ -39,6 +39,7 @@ const filters: { [key: string]: Filter } = {
   redRaise: { enabled: false, filter: new RedRaise() },
   convergence: { enabled: false, filter: new Convergence() },
   cutSlider: { enabled: false, filter: new CutSlider() },
+  glow: { enabled: false, filter: new Glow() },
 };
 
 function setBlueInvert(gui: dat.GUI, cb: () => void) {
@@ -129,6 +130,20 @@ function setCutSlider(gui: dat.GUI, cb: () => void) {
   folder.add(filters.cutSlider.filter, 'dimensionY', -50, 50).onChange(cb);
 }
 
+function setGlow(gui: dat.GUI, cb: () => void) {
+  const folder = gui.addFolder('Glow');
+  folder.add({ enabled: false }, 'enabled').onChange((enabled: boolean) => {
+    filters.glow.enabled = enabled;
+    cb();
+  });
+  folder
+    .add(filters.glow.filter, 'blur', 0, 20)
+    .step(0.05)
+    .onChange(cb);
+  folder.add(filters.glow.filter, 'dimensionX', 0, 50).onChange(cb);
+  folder.add(filters.glow.filter, 'dimensionY', 0, 50).onChange(cb);
+}
+
 class Main {
   renderer: PIXI.WebGLRenderer | PIXI.CanvasRenderer;
   stage: PIXI.Container;
@@ -207,6 +222,7 @@ class Main {
     hardcoreModulation.open();
     setConvergence(hardcoreModulation, this.updateFilters);
     setCutSlider(hardcoreModulation, this.updateFilters);
+    setGlow(hardcoreModulation, this.updateFilters);
 
     this.setAnimation();
   }
