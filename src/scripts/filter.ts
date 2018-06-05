@@ -132,15 +132,63 @@ function setCutSlider(gui: dat.GUI, cb: () => void) {
 class Main {
   renderer: PIXI.WebGLRenderer | PIXI.CanvasRenderer;
   stage: PIXI.Container;
+  sourceSelectElement: HTMLSelectElement;
+  sourceFileElement: HTMLInputElement;
+  uploadImageCanvas?: HTMLCanvasElement;
 
   constructor() {
     this.updateFilters = this.updateFilters.bind(this);
+    const sourceSelectElement = document.querySelector('.Source__select');
+    const sourceFileElement = document.querySelector('.Source__file');
+    if (
+      !sourceSelectElement ||
+      !(sourceSelectElement instanceof HTMLSelectElement) ||
+      !sourceFileElement ||
+      !(sourceFileElement instanceof HTMLInputElement)
+    ) {
+      throw new Error('Invalid DOM error');
+    }
+    this.sourceSelectElement = sourceSelectElement;
+    this.sourceFileElement = sourceFileElement;
+    this.sourceSelectElement.addEventListener('change', this.handleChangeSourceSelect.bind(this));
+    this.sourceFileElement.addEventListener('change', () => {
+      const file = (this.sourceFileElement.files || [])[0];
+      if (!file || !file.type.match(/^image\/(png|jpe?g|gif)$/)) {
+        return;
+      }
+
+      const fileReader = new FileReader();
+      fileReader.onload = event => {
+        if (!event.target) {
+          return;
+        }
+
+        const image = new Image();
+        image.onload = () => {
+          this.uploadImageCanvas = document.createElement('canvas');
+          this.uploadImageCanvas.width = image.width;
+          this.uploadImageCanvas.height = image.height;
+          const context = this.uploadImageCanvas.getContext('2d');
+          if (!context) {
+            return;
+          }
+          context.drawImage(image, 0, 0);
+          console.log(this.uploadImageCanvas);
+        };
+        image.src = event.target.result;
+      };
+
+      fileReader.readAsDataURL(file);
+    });
+
     this.renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight);
     this.stage = new PIXI.Container();
     const gui = new dat.GUI();
     gui.useLocalStorage = false;
 
-    PIXI.loader.add({ name: 'unsplash', url: '2.jpg' }).load(this.onImageLoad.bind(this));
+    PIXI.loader
+      .add([{ name: 'abstract', url: '1.jpg' }, { name: 'girl', url: '2.jpg' }, { name: 'view', url: '4.jpg' }])
+      .load(this.onImageLoad.bind(this));
     this.renderer.autoResize = true;
     document.body.appendChild(this.renderer.view);
 
@@ -179,10 +227,10 @@ class Main {
       const frame = Math.ceil(timeDiff / (1000 / fps));
 
       if (lastFrame < frame) {
-        console.log('Animate', frame, lastFrame, timeDiff);
+        // console.log('Animate', frame, lastFrame, timeDiff);
         lastFrame = frame;
       } else {
-        console.log('Pass', frame, lastFrame, timeDiff);
+        // console.log('Pass', frame, lastFrame, timeDiff);
       }
 
       requestAnimationFrame(loop);
@@ -192,8 +240,11 @@ class Main {
   }
 
   onImageLoad() {
-    const resource = PIXI.loader.resources.unsplash;
-    const texture = resource.texture.clone();
+    this.setTextureToStage(PIXI.loader.resources.girl.texture.clone());
+    this.renderer.render(this.stage);
+  }
+
+  setTextureToStage(texture: PIXI.Texture) {
     const sprite = new PIXI.Sprite(texture);
     sprite.position.set(0, 0);
     sprite.width = this.renderer.width;
@@ -201,6 +252,34 @@ class Main {
     sprite.texture.frame = new PIXI.Rectangle(0, 0, texture.width, texture.height);
 
     this.stage.addChild(sprite);
+  }
+
+  handleChangeSourceSelect() {
+    this.stage.removeChildren();
+    switch (this.sourceSelectElement.value) {
+      case 'preset-girl':
+        this.setTextureToStage(PIXI.loader.resources.girl.texture.clone());
+        break;
+      case 'preset-view':
+        this.setTextureToStage(PIXI.loader.resources.view.texture.clone());
+        break;
+      case 'preset-abstract':
+        this.setTextureToStage(PIXI.loader.resources.abstract.texture.clone());
+        break;
+      case 'camera':
+        // const video = document.createElement('video');
+        // video.src = navigator.getUserMedia({ video: true},);
+        break;
+      case 'upload':
+        if (!this.uploadImageCanvas) {
+          break;
+        }
+        this.setTextureToStage(PIXI.Texture.fromCanvas(this.uploadImageCanvas));
+        break;
+      default:
+        break;
+    }
+
     this.renderer.render(this.stage);
   }
 }
