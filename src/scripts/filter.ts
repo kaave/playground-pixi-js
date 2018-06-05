@@ -392,8 +392,19 @@ class Main {
         this.setTextureToStage(PIXI.loader.resources.abstract.texture.clone());
         break;
       case 'camera':
-        // const video = document.createElement('video');
-        // video.src = navigator.getUserMedia({ video: true},);
+        navigator.mediaDevices
+          .getUserMedia({ video: true, audio: false })
+          .then(stream => {
+            const url = window.URL.createObjectURL(stream);
+            const video = document.createElement('video');
+            video.src = url;
+            video.oncanplay = () => this.setTextureToStage(PIXI.Texture.fromVideo(video));
+            video.play();
+          })
+          .catch(error => {
+            console.error('mediaDevice.getUserMedia() error:', error);
+            return;
+          });
         break;
       case 'upload':
         if (!this.uploadImageCanvas) {
