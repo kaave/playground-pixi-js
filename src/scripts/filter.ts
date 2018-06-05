@@ -12,14 +12,14 @@ import GreenInvert from './filters/GreenInvert';
 import GreenRaise from './filters/GreenRaise';
 import HighContrast from './filters/HighContrast';
 import Invert from './filters/Invert';
-// import Noise from './filters/Noise';
-// import Outline from './filters/Outline';
+import Noise from './filters/Noise';
+import Outline from './filters/Outline';
 import RedInvert from './filters/RedInvert';
 import RedRaise from './filters/RedRaise';
-// import Shaker from './filters/Shaker';
-// import SlitScan from './filters/SlitScan';
-// import Swell from './filters/Swell';
-// import Twist from './filters/Twist';
+import Shaker from './filters/Shaker';
+import SlitScan from './filters/SlitScan';
+import Swell from './filters/Swell';
+import Twist from './filters/Twist';
 
 type RequestAnimationFrameID = number;
 
@@ -40,6 +40,12 @@ const filters: { [key: string]: Filter } = {
   convergence: { enabled: false, filter: new Convergence() },
   cutSlider: { enabled: false, filter: new CutSlider() },
   glow: { enabled: false, filter: new Glow() },
+  noise: { enabled: false, filter: new Noise() },
+  outline: { enabled: false, filter: new Outline() },
+  shaker: { enabled: false, filter: new Shaker() },
+  slitScan: { enabled: false, filter: new SlitScan() },
+  swell: { enabled: false, filter: new Swell() },
+  twist: { enabled: false, filter: new Twist() },
 };
 
 function setBlueInvert(gui: dat.GUI, cb: () => void) {
@@ -144,6 +150,97 @@ function setGlow(gui: dat.GUI, cb: () => void) {
   folder.add(filters.glow.filter, 'dimensionY', 0, 50).onChange(cb);
 }
 
+function setNoise(gui: dat.GUI, cb: () => void) {
+  const folder = gui.addFolder('Noise');
+  folder.add({ enabled: false }, 'enabled').onChange((enabled: boolean) => {
+    filters.noise.enabled = enabled;
+    cb();
+  });
+  folder.add(filters.noise.filter, 'rand', 0, 100).onChange(cb);
+  folder.add(filters.noise.filter, 'strength', 0, 100).onChange(cb);
+  folder.add(filters.noise.filter, 'dimensionX', 0, 5000).onChange(cb);
+  folder.add(filters.noise.filter, 'dimensionY', 0, 5000).onChange(cb);
+}
+
+function setOutline(gui: dat.GUI, cb: () => void) {
+  const folder = gui.addFolder('Outline');
+  folder.add({ enabled: false }, 'enabled').onChange((enabled: boolean) => {
+    filters.outline.enabled = enabled;
+    cb();
+  });
+  folder.add(filters.outline.filter, 'dimensionX', 0, 1000).onChange(cb);
+  folder.add(filters.outline.filter, 'dimensionY', 0, 1000).onChange(cb);
+}
+
+function setShaker(gui: dat.GUI, cb: () => void) {
+  const folder = gui.addFolder('Shaker');
+  folder.add({ enabled: false }, 'enabled').onChange((enabled: boolean) => {
+    filters.shaker.enabled = enabled;
+    cb();
+  });
+  folder
+    .add(filters.shaker.filter, 'blurX', -10, 10)
+    .step(0.01)
+    .onChange(cb);
+  folder
+    .add(filters.shaker.filter, 'blurY', -10, 10)
+    .step(0.01)
+    .onChange(cb);
+  folder.add(filters.shaker.filter, 'dimensionX', 0, 1000).onChange(cb);
+  folder.add(filters.shaker.filter, 'dimensionY', 0, 1000).onChange(cb);
+}
+
+function setSlitScan(gui: dat.GUI, cb: () => void) {
+  const folder = gui.addFolder('SlitScan');
+  folder.add({ enabled: false }, 'enabled').onChange((enabled: boolean) => {
+    filters.slitScan.enabled = enabled;
+    cb();
+  });
+  folder
+    .add(filters.slitScan.filter, 'rand', -200, 200)
+    .step(0.05)
+    .onChange(cb);
+  folder.add(filters.slitScan.filter, 'dimension', 0, 500).onChange(cb);
+}
+
+function setSwell(gui: dat.GUI, cb: () => void) {
+  const folder = gui.addFolder('Swell');
+  folder.add({ enabled: false }, 'enabled').onChange((enabled: boolean) => {
+    filters.swell.enabled = enabled;
+    cb();
+  });
+  folder
+    .add(filters.swell.filter, 'rand', -200, 200)
+    .step(0.05)
+    .onChange(cb);
+  folder.add(filters.swell.filter, 'dimensionX', -5000, 5000).onChange(cb);
+  folder.add(filters.swell.filter, 'dimensionY', -5000, 5000).onChange(cb);
+  folder.add(filters.swell.filter, 'dimensionZ', -5000, 5000).onChange(cb);
+  folder.add(filters.swell.filter, 'dimensionA', -5000, 5000).onChange(cb);
+}
+
+function setTwist(gui: dat.GUI, cb: () => void) {
+  const folder = gui.addFolder('Twist');
+  folder.add({ enabled: false }, 'enabled').onChange((enabled: boolean) => {
+    filters.twist.enabled = enabled;
+    cb();
+  });
+  folder
+    .add(filters.twist.filter, 'rand', -200, 200)
+    .step(0.05)
+    .onChange(cb);
+  folder
+    .add(filters.twist.filter, 'val2', -200, 200)
+    .step(0.05)
+    .onChange(cb);
+  folder
+    .add(filters.twist.filter, 'val3', -200, 200)
+    .step(0.05)
+    .onChange(cb);
+  folder.add(filters.twist.filter, 'dimensionX', 0, 5000).onChange(cb);
+  folder.add(filters.twist.filter, 'dimensionY', 0, 5000).onChange(cb);
+}
+
 class Main {
   renderer: PIXI.WebGLRenderer | PIXI.CanvasRenderer;
   stage: PIXI.Container;
@@ -207,7 +304,7 @@ class Main {
     this.renderer.autoResize = true;
     document.body.appendChild(this.renderer.view);
 
-    const modifyColorFolder = gui.addFolder('Modify color');
+    const modifyColorFolder = gui.addFolder('🎨 Modify color');
     modifyColorFolder.open();
     setBlueInvert(modifyColorFolder, this.updateFilters);
     setBlueRaise(modifyColorFolder, this.updateFilters);
@@ -218,11 +315,20 @@ class Main {
     setRedInvert(modifyColorFolder, this.updateFilters);
     setRedRaise(modifyColorFolder, this.updateFilters);
 
-    const hardcoreModulation = gui.addFolder('Hardcore Modulation');
+    const hardcoreModulation = gui.addFolder('🎸 Hardcore Modulation');
     hardcoreModulation.open();
     setConvergence(hardcoreModulation, this.updateFilters);
     setCutSlider(hardcoreModulation, this.updateFilters);
     setGlow(hardcoreModulation, this.updateFilters);
+    setNoise(hardcoreModulation, this.updateFilters);
+    setOutline(hardcoreModulation, this.updateFilters);
+    setShaker(hardcoreModulation, this.updateFilters);
+    setSlitScan(hardcoreModulation, this.updateFilters);
+
+    const animate = gui.addFolder('🐼 Animate');
+    animate.open();
+    setSwell(animate, this.updateFilters);
+    setTwist(animate, this.updateFilters);
 
     this.setAnimation();
   }
@@ -243,8 +349,11 @@ class Main {
       const frame = Math.ceil(timeDiff / (1000 / fps));
 
       if (lastFrame < frame) {
+        (filters.swell.filter as any).timer += 1;
+        (filters.twist.filter as any).timer += 1;
         // console.log('Animate', frame, lastFrame, timeDiff);
         lastFrame = frame;
+        this.renderer.render(this.stage);
       } else {
         // console.log('Pass', frame, lastFrame, timeDiff);
       }
