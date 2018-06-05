@@ -21,6 +21,8 @@ import RedRaise from './filters/RedRaise';
 // import Swell from './filters/Swell';
 // import Twist from './filters/Twist';
 
+type RequestAnimationFrameID = number;
+
 interface Filter {
   enabled: boolean;
   filter: PIXI.Filter<any>;
@@ -130,29 +132,35 @@ function setCutSlider(gui: dat.GUI, cb: () => void) {
 class Main {
   renderer: PIXI.WebGLRenderer | PIXI.CanvasRenderer;
   stage: PIXI.Container;
-  gui: dat.GUI;
 
   constructor() {
     this.updateFilters = this.updateFilters.bind(this);
     this.renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight);
     this.stage = new PIXI.Container();
-    this.gui = new dat.GUI();
-    this.gui.useLocalStorage = false;
+    const gui = new dat.GUI();
+    gui.useLocalStorage = false;
 
     PIXI.loader.add({ name: 'unsplash', url: '2.jpg' }).load(this.onImageLoad.bind(this));
     this.renderer.autoResize = true;
     document.body.appendChild(this.renderer.view);
 
-    setBlueInvert(this.gui, this.updateFilters);
-    setBlueRaise(this.gui, this.updateFilters);
-    setGreenInvert(this.gui, this.updateFilters);
-    setGreenRaise(this.gui, this.updateFilters);
-    setHighContrast(this.gui, this.updateFilters);
-    setInvert(this.gui, this.updateFilters);
-    setRedInvert(this.gui, this.updateFilters);
-    setRedRaise(this.gui, this.updateFilters);
-    setConvergence(this.gui, this.updateFilters);
-    setCutSlider(this.gui, this.updateFilters);
+    const modifyColorFolder = gui.addFolder('Modify color');
+    modifyColorFolder.open();
+    setBlueInvert(modifyColorFolder, this.updateFilters);
+    setBlueRaise(modifyColorFolder, this.updateFilters);
+    setGreenInvert(modifyColorFolder, this.updateFilters);
+    setGreenRaise(modifyColorFolder, this.updateFilters);
+    setHighContrast(modifyColorFolder, this.updateFilters);
+    setInvert(modifyColorFolder, this.updateFilters);
+    setRedInvert(modifyColorFolder, this.updateFilters);
+    setRedRaise(modifyColorFolder, this.updateFilters);
+
+    const hardcoreModulation = gui.addFolder('Hardcore Modulation');
+    hardcoreModulation.open();
+    setConvergence(hardcoreModulation, this.updateFilters);
+    setCutSlider(hardcoreModulation, this.updateFilters);
+
+    this.setAnimation();
   }
 
   updateFilters() {
@@ -163,14 +171,24 @@ class Main {
     this.renderer.render(this.stage);
   }
 
-  setAnimation() {
-    // setInterval(() => {
-    //   if (this.filters) {
-    //     // const setValue = Math.random();
-    //     this.filters.invert.timer += 1;
-    //     this.renderer.render(this.stage);
-    //   }
-    // }, 1000 / 24);
+  setAnimation({ fps }: { fps: number } = { fps: 24 }): RequestAnimationFrameID {
+    const startTime = performance.now();
+    let lastFrame = 0;
+    const loop = () => {
+      const timeDiff = performance.now() - startTime;
+      const frame = Math.ceil(timeDiff / (1000 / fps));
+
+      if (lastFrame < frame) {
+        console.log('Animate', frame, lastFrame, timeDiff);
+        lastFrame = frame;
+      } else {
+        console.log('Pass', frame, lastFrame, timeDiff);
+      }
+
+      requestAnimationFrame(loop);
+    };
+
+    return requestAnimationFrame(loop);
   }
 
   onImageLoad() {
