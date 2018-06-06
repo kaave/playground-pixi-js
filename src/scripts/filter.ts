@@ -306,14 +306,14 @@ class Main {
 
     const modifyColorFolder = gui.addFolder('🎨 Modify color');
     modifyColorFolder.open();
-    setBlueInvert(modifyColorFolder, this.updateFilters);
-    setBlueRaise(modifyColorFolder, this.updateFilters);
-    setGreenInvert(modifyColorFolder, this.updateFilters);
-    setGreenRaise(modifyColorFolder, this.updateFilters);
-    setHighContrast(modifyColorFolder, this.updateFilters);
-    setInvert(modifyColorFolder, this.updateFilters);
     setRedInvert(modifyColorFolder, this.updateFilters);
     setRedRaise(modifyColorFolder, this.updateFilters);
+    setGreenInvert(modifyColorFolder, this.updateFilters);
+    setGreenRaise(modifyColorFolder, this.updateFilters);
+    setBlueInvert(modifyColorFolder, this.updateFilters);
+    setBlueRaise(modifyColorFolder, this.updateFilters);
+    setInvert(modifyColorFolder, this.updateFilters);
+    setHighContrast(modifyColorFolder, this.updateFilters);
 
     const hardcoreModulation = gui.addFolder('🎸 Hardcore Modulation');
     hardcoreModulation.open();
