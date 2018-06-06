@@ -31,3 +31,17 @@ canvas {
     display: block;
     margin-top: 0.5em;
 }
+
+.License {
+    position: absolute;
+    display: block;
+    bottom: 1em;
+    left: 1em;
+    width: auto;
+    font-size: 1.4rem;
+    background: hsla(0, 0%, 100%, 0.8);
+    color: #112;
+    border: solid 2px #112;
+    padding: 0.2em 0.4em;
+    letter-spacing: 0.05em;
+}
