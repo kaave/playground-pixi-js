@@ -371,10 +371,25 @@ class Main {
 
   setTextureToStage(texture: PIXI.Texture) {
     const sprite = new PIXI.Sprite(texture);
-    sprite.position.set(0, 0);
-    sprite.width = this.renderer.width;
-    sprite.height = this.renderer.height;
     sprite.texture.frame = new PIXI.Rectangle(0, 0, texture.width, texture.height);
+    // これから貼るspriteをrendererの幅いっぱいにする
+
+    const rendererRatio = { x: 1, y: this.renderer.height / this.renderer.width };
+    const textureRatio = { x: 1, y: texture.height / texture.width };
+
+    if (textureRatio.y < rendererRatio.y) {
+      // 画面の縦の比率より、画像の縦の比率が小さい
+      // そのままだと横が余るので、横をあわせる
+      sprite.width = texture.width * this.renderer.height / texture.height;
+      sprite.height = this.renderer.height;
+      sprite.position.set(sprite.width / -2 + this.renderer.width / 2, 0);
+    } else {
+      // 画面の縦の比率より、画像の縦の比率が大きい
+      // そのままだと縦が余るので、縦をあわせる
+      sprite.width = this.renderer.width;
+      sprite.height = texture.height * this.renderer.width / texture.width;
+      sprite.position.set(0, sprite.height / -2 + this.renderer.height / 2);
+    }
 
     this.stage.addChild(sprite);
   }
