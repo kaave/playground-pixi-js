@@ -25,110 +25,141 @@ type RequestAnimationFrameID = number;
 
 interface Filter {
   enabled: boolean;
+  key: string;
   filter: PIXI.Filter<any>;
 }
 
 const filters: { [key: string]: Filter } = {
-  blueInvert: { enabled: false, filter: new BlueInvert() },
-  blueRaise: { enabled: false, filter: new BlueRaise() },
-  greenInvert: { enabled: false, filter: new GreenInvert() },
-  greenRaise: { enabled: false, filter: new GreenRaise() },
-  highContrast: { enabled: false, filter: new HighContrast() },
-  invert: { enabled: false, filter: new Invert() },
-  redInvert: { enabled: false, filter: new RedInvert() },
-  redRaise: { enabled: false, filter: new RedRaise() },
-  convergence: { enabled: false, filter: new Convergence() },
-  cutSlider: { enabled: false, filter: new CutSlider() },
-  glow: { enabled: false, filter: new Glow() },
-  noise: { enabled: false, filter: new Noise() },
-  outline: { enabled: false, filter: new Outline() },
-  shaker: { enabled: false, filter: new Shaker() },
-  slitScan: { enabled: false, filter: new SlitScan() },
-  swell: { enabled: false, filter: new Swell() },
-  twist: { enabled: false, filter: new Twist() },
+  redInvert: { enabled: false, key: 'q', filter: new RedInvert() },
+  redRaise: { enabled: false, key: 'w', filter: new RedRaise() },
+  greenInvert: { enabled: false, key: 'e', filter: new GreenInvert() },
+  greenRaise: { enabled: false, key: 'r', filter: new GreenRaise() },
+  blueInvert: { enabled: false, key: 't', filter: new BlueInvert() },
+  blueRaise: { enabled: false, key: 'y', filter: new BlueRaise() },
+  invert: { enabled: false, key: 'u', filter: new Invert() },
+  highContrast: { enabled: false, key: 'i', filter: new HighContrast() },
+  convergence: { enabled: false, key: 'a', filter: new Convergence() },
+  cutSlider: { enabled: false, key: 's', filter: new CutSlider() },
+  glow: { enabled: false, key: 'd', filter: new Glow() },
+  noise: { enabled: false, key: 'f', filter: new Noise() },
+  outline: { enabled: false, key: 'g', filter: new Outline() },
+  shaker: { enabled: false, key: 'h', filter: new Shaker() },
+  slitScan: { enabled: false, key: 'j', filter: new SlitScan() },
+  swell: { enabled: false, key: 'z', filter: new Swell() },
+  twist: { enabled: false, key: 'x', filter: new Twist() },
 };
 
 function setBlueInvert(gui: dat.GUI, cb: () => void) {
-  const folder = gui.addFolder('BlueInvert');
-  folder.add({ enabled: false }, 'enabled').onChange((enabled: boolean) => {
-    filters.blueInvert.enabled = enabled;
-    cb();
-  });
+  const folder = gui.addFolder(`BlueInvert (${filters.blueInvert.key})`);
+  folder
+    .add(filters.blueInvert, 'enabled')
+    .listen()
+    .onChange((enabled: boolean) => {
+      filters.blueInvert.enabled = enabled;
+      cb();
+    });
 }
 
 function setBlueRaise(gui: dat.GUI, cb: () => void) {
-  const folder = gui.addFolder('BlueRaise');
-  folder.add({ enabled: false }, 'enabled').onChange((enabled: boolean) => {
-    filters.blueRaise.enabled = enabled;
-    cb();
-  });
+  const folder = gui.addFolder(`BlueRaise (${filters.blueRaise.key})`);
+  folder
+    .add(filters.blueRaise, 'enabled')
+    .listen()
+    .onChange((enabled: boolean) => {
+      filters.blueRaise.enabled = enabled;
+      cb();
+    });
 }
 
 function setGreenInvert(gui: dat.GUI, cb: () => void) {
-  const folder = gui.addFolder('GreenInvert');
-  folder.add({ enabled: false }, 'enabled').onChange((enabled: boolean) => {
-    filters.greenInvert.enabled = enabled;
-    cb();
-  });
+  const folder = gui.addFolder(`GreenInvert (${filters.greenInvert.key})`);
+  folder
+    .add(filters.greenInvert, 'enabled')
+    .listen()
+    .onChange((enabled: boolean) => {
+      filters.greenInvert.enabled = enabled;
+      cb();
+    });
 }
 
 function setGreenRaise(gui: dat.GUI, cb: () => void) {
-  const folder = gui.addFolder('GreenRaise');
-  folder.add({ enabled: false }, 'enabled').onChange((enabled: boolean) => {
-    filters.greenRaise.enabled = enabled;
-    cb();
-  });
+  const folder = gui.addFolder(`GreenRaise (${filters.greenRaise.key})`);
+  folder
+    .add(filters.greenRaise, 'enabled')
+    .listen()
+    .onChange((enabled: boolean) => {
+      filters.greenRaise.enabled = enabled;
+      cb();
+    });
 }
 
 function setHighContrast(gui: dat.GUI, cb: () => void) {
-  const folder = gui.addFolder('HighContrast');
-  folder.add({ enabled: false }, 'enabled').onChange((enabled: boolean) => {
-    filters.highContrast.enabled = enabled;
-    cb();
-  });
+  const folder = gui.addFolder(`HighContrast (${filters.highContrast.key})`);
+  folder
+    .add(filters.highContrast, 'enabled')
+    .listen()
+    .onChange((enabled: boolean) => {
+      filters.highContrast.enabled = enabled;
+      cb();
+    });
 }
 
 function setInvert(gui: dat.GUI, cb: () => void) {
-  const folder = gui.addFolder('Invert');
-  folder.add({ enabled: false }, 'enabled').onChange((enabled: boolean) => {
-    filters.invert.enabled = enabled;
-    cb();
-  });
+  const folder = gui.addFolder(`Invert (${filters.invert.key})`);
+  folder
+    .add(filters.invert, 'enabled')
+    .listen()
+    .onChange((enabled: boolean) => {
+      filters.invert.enabled = enabled;
+      cb();
+    });
 }
 
 function setRedInvert(gui: dat.GUI, cb: () => void) {
-  const folder = gui.addFolder('RedInvert');
-  folder.add({ enabled: false }, 'enabled').onChange((enabled: boolean) => {
-    filters.redInvert.enabled = enabled;
-    cb();
-  });
+  const folder = gui.addFolder(`RedInvert (${filters.redInvert.key})`);
+  folder
+    .add(filters.redInvert, 'enabled')
+    .listen()
+    .onChange((enabled: boolean) => {
+      filters.redInvert.enabled = enabled;
+      cb();
+    });
 }
 
 function setRedRaise(gui: dat.GUI, cb: () => void) {
-  const folder = gui.addFolder('RedRaise');
-  folder.add({ enabled: false }, 'enabled').onChange((enabled: boolean) => {
-    filters.redRaise.enabled = enabled;
-    cb();
-  });
+  const folder = gui.addFolder(`RedRaise (${filters.redRaise.key})`);
+  folder
+    .add(filters.redRaise, 'enabled')
+    .listen()
+    .onChange((enabled: boolean) => {
+      filters.redRaise.enabled = enabled;
+      cb();
+    });
 }
 
 function setConvergence(gui: dat.GUI, cb: () => void) {
-  const folder = gui.addFolder('Convergence');
-  folder.add({ enabled: false }, 'enabled').onChange((enabled: boolean) => {
-    filters.convergence.enabled = enabled;
-    cb();
-  });
+  const folder = gui.addFolder(`Convergence (${filters.convergence.key})`);
+  folder
+    .add(filters.convergence, 'enabled')
+    .listen()
+    .onChange((enabled: boolean) => {
+      filters.convergence.enabled = enabled;
+      cb();
+    });
   folder.add(filters.convergence.filter, 'rand', -5, 5).onChange(cb);
   folder.add(filters.convergence.filter, 'dimensionX', 0, 2000).onChange(cb);
   folder.add(filters.convergence.filter, 'dimensionY', 0, 2000).onChange(cb);
 }
 
 function setCutSlider(gui: dat.GUI, cb: () => void) {
-  const folder = gui.addFolder('CutSlider');
-  folder.add({ enabled: false }, 'enabled').onChange((enabled: boolean) => {
-    filters.cutSlider.enabled = enabled;
-    cb();
-  });
+  const folder = gui.addFolder(`CutSlider (${filters.cutSlider.key})`);
+  folder
+    .add(filters.cutSlider, 'enabled')
+    .listen()
+    .onChange((enabled: boolean) => {
+      filters.cutSlider.enabled = enabled;
+      cb();
+    });
   folder.add(filters.cutSlider.filter, 'rand', -10.0, 10.0).onChange(cb);
   folder.add(filters.cutSlider.filter, 'val1', -10.0, 10.0).onChange(cb);
   folder.add(filters.cutSlider.filter, 'val2', -30.0, 30.0).onChange(cb);
@@ -137,11 +168,14 @@ function setCutSlider(gui: dat.GUI, cb: () => void) {
 }
 
 function setGlow(gui: dat.GUI, cb: () => void) {
-  const folder = gui.addFolder('Glow');
-  folder.add({ enabled: false }, 'enabled').onChange((enabled: boolean) => {
-    filters.glow.enabled = enabled;
-    cb();
-  });
+  const folder = gui.addFolder(`Glow (${filters.glow.key})`);
+  folder
+    .add(filters.glow, 'enabled')
+    .listen()
+    .onChange((enabled: boolean) => {
+      filters.glow.enabled = enabled;
+      cb();
+    });
   folder
     .add(filters.glow.filter, 'blur', 0, 20)
     .step(0.05)
@@ -151,11 +185,14 @@ function setGlow(gui: dat.GUI, cb: () => void) {
 }
 
 function setNoise(gui: dat.GUI, cb: () => void) {
-  const folder = gui.addFolder('Noise');
-  folder.add({ enabled: false }, 'enabled').onChange((enabled: boolean) => {
-    filters.noise.enabled = enabled;
-    cb();
-  });
+  const folder = gui.addFolder(`Noise (${filters.noise.key})`);
+  folder
+    .add(filters.noise, 'enabled')
+    .listen()
+    .onChange((enabled: boolean) => {
+      filters.noise.enabled = enabled;
+      cb();
+    });
   folder.add(filters.noise.filter, 'rand', 0, 100).onChange(cb);
   folder.add(filters.noise.filter, 'strength', 0, 100).onChange(cb);
   folder.add(filters.noise.filter, 'dimensionX', 0, 5000).onChange(cb);
@@ -163,21 +200,28 @@ function setNoise(gui: dat.GUI, cb: () => void) {
 }
 
 function setOutline(gui: dat.GUI, cb: () => void) {
-  const folder = gui.addFolder('Outline');
-  folder.add({ enabled: false }, 'enabled').onChange((enabled: boolean) => {
-    filters.outline.enabled = enabled;
-    cb();
-  });
+  const folder = gui.addFolder(`Outline (${filters.outline.key})`);
+  folder
+    .add(filters.outline, 'enabled')
+    .listen()
+    .onChange((enabled: boolean) => {
+      filters.outline.enabled = enabled;
+      cb();
+    });
   folder.add(filters.outline.filter, 'dimensionX', 0, 1000).onChange(cb);
   folder.add(filters.outline.filter, 'dimensionY', 0, 1000).onChange(cb);
 }
 
 function setShaker(gui: dat.GUI, cb: () => void) {
-  const folder = gui.addFolder('Shaker');
-  folder.add({ enabled: false }, 'enabled').onChange((enabled: boolean) => {
-    filters.shaker.enabled = enabled;
-    cb();
-  });
+  const folder = gui.addFolder(`Shaker (${filters.shaker.key})`);
+  folder
+    .add(filters.shaker, 'enabled')
+    .listen()
+
+    .onChange((enabled: boolean) => {
+      filters.shaker.enabled = enabled;
+      cb();
+    });
   folder
     .add(filters.shaker.filter, 'blurX', -10, 10)
     .step(0.01)
@@ -191,11 +235,14 @@ function setShaker(gui: dat.GUI, cb: () => void) {
 }
 
 function setSlitScan(gui: dat.GUI, cb: () => void) {
-  const folder = gui.addFolder('SlitScan');
-  folder.add({ enabled: false }, 'enabled').onChange((enabled: boolean) => {
-    filters.slitScan.enabled = enabled;
-    cb();
-  });
+  const folder = gui.addFolder(`SlitScan (${filters.slitScan.key})`);
+  folder
+    .add(filters.slitScan, 'enabled')
+    .listen()
+    .onChange((enabled: boolean) => {
+      filters.slitScan.enabled = enabled;
+      cb();
+    });
   folder
     .add(filters.slitScan.filter, 'rand', -200, 200)
     .step(0.05)
@@ -204,11 +251,14 @@ function setSlitScan(gui: dat.GUI, cb: () => void) {
 }
 
 function setSwell(gui: dat.GUI, cb: () => void) {
-  const folder = gui.addFolder('Swell');
-  folder.add({ enabled: false }, 'enabled').onChange((enabled: boolean) => {
-    filters.swell.enabled = enabled;
-    cb();
-  });
+  const folder = gui.addFolder(`Swell (${filters.swell.key})`);
+  folder
+    .add(filters.swell, 'enabled')
+    .listen()
+    .onChange((enabled: boolean) => {
+      filters.swell.enabled = enabled;
+      cb();
+    });
   folder
     .add(filters.swell.filter, 'rand', -200, 200)
     .step(0.05)
@@ -220,11 +270,14 @@ function setSwell(gui: dat.GUI, cb: () => void) {
 }
 
 function setTwist(gui: dat.GUI, cb: () => void) {
-  const folder = gui.addFolder('Twist');
-  folder.add({ enabled: false }, 'enabled').onChange((enabled: boolean) => {
-    filters.twist.enabled = enabled;
-    cb();
-  });
+  const folder = gui.addFolder(`Twist (${filters.twist.key})`);
+  folder
+    .add(filters.twist, 'enabled')
+    .listen()
+    .onChange((enabled: boolean) => {
+      filters.twist.enabled = enabled;
+      cb();
+    });
   folder
     .add(filters.twist.filter, 'rand', -200, 200)
     .step(0.05)
@@ -295,7 +348,7 @@ class Main {
 
     this.renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight);
     this.stage = new PIXI.Container();
-    const gui = new dat.GUI();
+    const gui = new dat.GUI({ hideable: false });
     gui.useLocalStorage = false;
 
     PIXI.loader
@@ -331,6 +384,22 @@ class Main {
     setTwist(animate, this.updateFilters);
 
     this.setAnimation();
+  }
+
+  handleKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter') {
+      Object.values(filters).forEach(filter => (filter.enabled = false));
+      this.updateFilters();
+      return;
+    }
+
+    const targetFilter = Object.values(filters).find(({ key }) => key === event.key);
+    if (!targetFilter) {
+      return;
+    }
+
+    targetFilter.enabled = !targetFilter.enabled;
+    this.updateFilters();
   }
 
   updateFilters() {
@@ -439,4 +508,6 @@ window.addEventListener('DOMContentLoaded', () => {
   const main = new Main();
   main.setAnimation();
   main.updateFilters();
+
+  window.addEventListener('keypress', main.handleKeyPress.bind(main));
 });
