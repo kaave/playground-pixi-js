@@ -21,12 +21,12 @@ import SlitScan from './filters/SlitScan';
 import Swell from './filters/Swell';
 import Twist from './filters/Twist';
 
-type RequestAnimationFrameID = number;
-
 interface Filter {
   enabled: boolean;
+  random?: boolean;
   key: string;
   filter: PIXI.Filter<any>;
+  properties?: Array<{ key: string; max: number; min: number; step?: number }>;
 }
 
 const filters: { [key: string]: Filter } = {
@@ -38,15 +38,105 @@ const filters: { [key: string]: Filter } = {
   blueRaise: { enabled: false, key: 'y', filter: new BlueRaise() },
   invert: { enabled: false, key: 'u', filter: new Invert() },
   highContrast: { enabled: false, key: 'i', filter: new HighContrast() },
-  convergence: { enabled: false, key: 'a', filter: new Convergence() },
-  cutSlider: { enabled: false, key: 's', filter: new CutSlider() },
-  glow: { enabled: false, key: 'd', filter: new Glow() },
-  noise: { enabled: false, key: 'f', filter: new Noise() },
-  outline: { enabled: false, key: 'g', filter: new Outline() },
-  shaker: { enabled: false, key: 'h', filter: new Shaker() },
-  slitScan: { enabled: false, key: 'j', filter: new SlitScan() },
-  swell: { enabled: false, key: 'z', filter: new Swell() },
-  twist: { enabled: false, key: 'x', filter: new Twist() },
+  convergence: {
+    enabled: false,
+    random: false,
+    key: 'a',
+    filter: new Convergence(),
+    properties: [
+      { key: 'rand', min: -5, max: 5 },
+      { key: 'dimensionX', min: 0, max: 2000 },
+      { key: 'dimensionY', min: 0, max: 2000 },
+    ],
+  },
+  cutSlider: {
+    enabled: false,
+    random: false,
+    key: 's',
+    filter: new CutSlider(),
+    properties: [
+      { key: 'rand', min: -10, max: 10 },
+      { key: 'val1', min: -10, max: 10 },
+      { key: 'val2', min: -30, max: 30 },
+      { key: 'dimensionX', min: -50, max: 50 },
+      { key: 'dimensionY', min: -50, max: 50 },
+    ],
+  },
+  glow: {
+    enabled: false,
+    random: false,
+    key: 'd',
+    filter: new Glow(),
+    properties: [
+      { key: 'blur', min: 0, max: 20, step: 0.05 },
+      { key: 'dimensionX', min: 0, max: 50 },
+      { key: 'dimensionY', min: 0, max: 50 },
+    ],
+  },
+  noise: {
+    enabled: false,
+    random: false,
+    key: 'f',
+    filter: new Noise(),
+    properties: [
+      { key: 'rand', min: 0, max: 100 },
+      { key: 'strength', min: 0, max: 100 },
+      { key: 'dimensionX', min: 0, max: 5000 },
+      { key: 'dimensionY', min: 0, max: 5000 },
+    ],
+  },
+  outline: {
+    enabled: false,
+    random: false,
+    key: 'g',
+    filter: new Outline(),
+    properties: [{ key: 'dimensionX', min: 0, max: 1000 }, { key: 'dimensionY', min: 0, max: 1000 }],
+  },
+  shaker: {
+    enabled: false,
+    random: false,
+    key: 'h',
+    filter: new Shaker(),
+    properties: [
+      { key: 'blurX', min: -10, max: 10, step: 0.01 },
+      { key: 'blurY', min: -10, max: 10, step: 0.01 },
+      { key: 'dimensionX', min: 0, max: 5000 },
+      { key: 'dimensionY', min: 0, max: 5000 },
+    ],
+  },
+  slitScan: {
+    enabled: false,
+    random: false,
+    key: 'j',
+    filter: new SlitScan(),
+    properties: [{ key: 'rand', min: -200, max: 200 }, { key: 'dimension', min: 0, max: 500 }],
+  },
+  swell: {
+    enabled: false,
+    random: false,
+    key: 'z',
+    filter: new Swell(),
+    properties: [
+      { key: 'rand', min: -200, max: 200, step: 0.05 },
+      { key: 'dimensionX', min: -5000, max: 5000 },
+      { key: 'dimensionY', min: -5000, max: 5000 },
+      { key: 'dimensionZ', min: -5000, max: 5000 },
+      { key: 'dimensionA', min: -5000, max: 5000 },
+    ],
+  },
+  twist: {
+    enabled: false,
+    random: false,
+    key: 'x',
+    filter: new Twist(),
+    properties: [
+      { key: 'rand', min: -200, max: 200, step: 0.05 },
+      { key: 'val2', min: -200, max: 200, step: 0.05 },
+      { key: 'val3', min: -200, max: 200, step: 0.05 },
+      { key: 'dimensionX', min: 0, max: 5000 },
+      { key: 'dimensionY', min: 0, max: 5000 },
+    ],
+  },
 };
 
 function setBlueInvert(gui: dat.GUI, cb: () => void) {
@@ -146,9 +236,24 @@ function setConvergence(gui: dat.GUI, cb: () => void) {
       filters.convergence.enabled = enabled;
       cb();
     });
-  folder.add(filters.convergence.filter, 'rand', -5, 5).onChange(cb);
-  folder.add(filters.convergence.filter, 'dimensionX', 0, 2000).onChange(cb);
-  folder.add(filters.convergence.filter, 'dimensionY', 0, 2000).onChange(cb);
+  folder
+    .add(filters.convergence, 'random')
+    .listen()
+    .onChange((random: boolean) => {
+      filters.convergence.random = random;
+      cb();
+    });
+
+  const { properties } = filters.convergence;
+  if (properties) {
+    properties.forEach(({ key, max, min, step }) => {
+      const guiController = folder.add(filters.convergence.filter, key, min, max).listen();
+      if (step != null) {
+        guiController.step(step);
+      }
+      guiController.onChange(cb);
+    });
+  }
 }
 
 function setCutSlider(gui: dat.GUI, cb: () => void) {
@@ -160,11 +265,24 @@ function setCutSlider(gui: dat.GUI, cb: () => void) {
       filters.cutSlider.enabled = enabled;
       cb();
     });
-  folder.add(filters.cutSlider.filter, 'rand', -10.0, 10.0).onChange(cb);
-  folder.add(filters.cutSlider.filter, 'val1', -10.0, 10.0).onChange(cb);
-  folder.add(filters.cutSlider.filter, 'val2', -30.0, 30.0).onChange(cb);
-  folder.add(filters.cutSlider.filter, 'dimensionX', -50, 50).onChange(cb);
-  folder.add(filters.cutSlider.filter, 'dimensionY', -50, 50).onChange(cb);
+  folder
+    .add(filters.cutSlider, 'random')
+    .listen()
+    .onChange((random: boolean) => {
+      filters.cutSlider.random = random;
+      cb();
+    });
+
+  const { properties } = filters.cutSlider;
+  if (properties) {
+    properties.forEach(({ key, max, min, step }) => {
+      const guiController = folder.add(filters.cutSlider.filter, key, min, max).listen();
+      if (step != null) {
+        guiController.step(step);
+      }
+      guiController.onChange(cb);
+    });
+  }
 }
 
 function setGlow(gui: dat.GUI, cb: () => void) {
@@ -177,11 +295,23 @@ function setGlow(gui: dat.GUI, cb: () => void) {
       cb();
     });
   folder
-    .add(filters.glow.filter, 'blur', 0, 20)
-    .step(0.05)
-    .onChange(cb);
-  folder.add(filters.glow.filter, 'dimensionX', 0, 50).onChange(cb);
-  folder.add(filters.glow.filter, 'dimensionY', 0, 50).onChange(cb);
+    .add(filters.glow, 'random')
+    .listen()
+    .onChange((random: boolean) => {
+      filters.glow.random = random;
+      cb();
+    });
+
+  const { properties } = filters.glow;
+  if (properties) {
+    properties.forEach(({ key, max, min, step }) => {
+      const guiController = folder.add(filters.glow.filter, key, min, max).listen();
+      if (step != null) {
+        guiController.step(step);
+      }
+      guiController.onChange(cb);
+    });
+  }
 }
 
 function setNoise(gui: dat.GUI, cb: () => void) {
@@ -193,10 +323,24 @@ function setNoise(gui: dat.GUI, cb: () => void) {
       filters.noise.enabled = enabled;
       cb();
     });
-  folder.add(filters.noise.filter, 'rand', 0, 100).onChange(cb);
-  folder.add(filters.noise.filter, 'strength', 0, 100).onChange(cb);
-  folder.add(filters.noise.filter, 'dimensionX', 0, 5000).onChange(cb);
-  folder.add(filters.noise.filter, 'dimensionY', 0, 5000).onChange(cb);
+  folder
+    .add(filters.noise, 'random')
+    .listen()
+    .onChange((random: boolean) => {
+      filters.noise.random = random;
+      cb();
+    });
+
+  const { properties } = filters.noise;
+  if (properties) {
+    properties.forEach(({ key, max, min, step }) => {
+      const guiController = folder.add(filters.noise.filter, key, min, max).listen();
+      if (step != null) {
+        guiController.step(step);
+      }
+      guiController.onChange(cb);
+    });
+  }
 }
 
 function setOutline(gui: dat.GUI, cb: () => void) {
@@ -208,8 +352,24 @@ function setOutline(gui: dat.GUI, cb: () => void) {
       filters.outline.enabled = enabled;
       cb();
     });
-  folder.add(filters.outline.filter, 'dimensionX', 0, 1000).onChange(cb);
-  folder.add(filters.outline.filter, 'dimensionY', 0, 1000).onChange(cb);
+  folder
+    .add(filters.outline, 'random')
+    .listen()
+    .onChange((random: boolean) => {
+      filters.outline.random = random;
+      cb();
+    });
+
+  const { properties } = filters.outline;
+  if (properties) {
+    properties.forEach(({ key, max, min, step }) => {
+      const guiController = folder.add(filters.outline.filter, key, min, max).listen();
+      if (step != null) {
+        guiController.step(step);
+      }
+      guiController.onChange(cb);
+    });
+  }
 }
 
 function setShaker(gui: dat.GUI, cb: () => void) {
@@ -223,15 +383,23 @@ function setShaker(gui: dat.GUI, cb: () => void) {
       cb();
     });
   folder
-    .add(filters.shaker.filter, 'blurX', -10, 10)
-    .step(0.01)
-    .onChange(cb);
-  folder
-    .add(filters.shaker.filter, 'blurY', -10, 10)
-    .step(0.01)
-    .onChange(cb);
-  folder.add(filters.shaker.filter, 'dimensionX', 0, 1000).onChange(cb);
-  folder.add(filters.shaker.filter, 'dimensionY', 0, 1000).onChange(cb);
+    .add(filters.shaker, 'random')
+    .listen()
+    .onChange((random: boolean) => {
+      filters.shaker.random = random;
+      cb();
+    });
+
+  const { properties } = filters.shaker;
+  if (properties) {
+    properties.forEach(({ key, max, min, step }) => {
+      const guiController = folder.add(filters.shaker.filter, key, min, max).listen();
+      if (step != null) {
+        guiController.step(step);
+      }
+      guiController.onChange(cb);
+    });
+  }
 }
 
 function setSlitScan(gui: dat.GUI, cb: () => void) {
@@ -244,10 +412,23 @@ function setSlitScan(gui: dat.GUI, cb: () => void) {
       cb();
     });
   folder
-    .add(filters.slitScan.filter, 'rand', -200, 200)
-    .step(0.05)
-    .onChange(cb);
-  folder.add(filters.slitScan.filter, 'dimension', 0, 500).onChange(cb);
+    .add(filters.slitScan, 'random')
+    .listen()
+    .onChange((random: boolean) => {
+      filters.slitScan.random = random;
+      cb();
+    });
+
+  const { properties } = filters.slitScan;
+  if (properties) {
+    properties.forEach(({ key, max, min, step }) => {
+      const guiController = folder.add(filters.slitScan.filter, key, min, max).listen();
+      if (step != null) {
+        guiController.step(step);
+      }
+      guiController.onChange(cb);
+    });
+  }
 }
 
 function setSwell(gui: dat.GUI, cb: () => void) {
@@ -260,13 +441,23 @@ function setSwell(gui: dat.GUI, cb: () => void) {
       cb();
     });
   folder
-    .add(filters.swell.filter, 'rand', -200, 200)
-    .step(0.05)
-    .onChange(cb);
-  folder.add(filters.swell.filter, 'dimensionX', -5000, 5000).onChange(cb);
-  folder.add(filters.swell.filter, 'dimensionY', -5000, 5000).onChange(cb);
-  folder.add(filters.swell.filter, 'dimensionZ', -5000, 5000).onChange(cb);
-  folder.add(filters.swell.filter, 'dimensionA', -5000, 5000).onChange(cb);
+    .add(filters.swell, 'random')
+    .listen()
+    .onChange((random: boolean) => {
+      filters.swell.random = random;
+      cb();
+    });
+
+  const { properties } = filters.swell;
+  if (properties) {
+    properties.forEach(({ key, max, min, step }) => {
+      const guiController = folder.add(filters.swell.filter, key, min, max).listen();
+      if (step != null) {
+        guiController.step(step);
+      }
+      guiController.onChange(cb);
+    });
+  }
 }
 
 function setTwist(gui: dat.GUI, cb: () => void) {
@@ -279,19 +470,23 @@ function setTwist(gui: dat.GUI, cb: () => void) {
       cb();
     });
   folder
-    .add(filters.twist.filter, 'rand', -200, 200)
-    .step(0.05)
-    .onChange(cb);
-  folder
-    .add(filters.twist.filter, 'val2', -200, 200)
-    .step(0.05)
-    .onChange(cb);
-  folder
-    .add(filters.twist.filter, 'val3', -200, 200)
-    .step(0.05)
-    .onChange(cb);
-  folder.add(filters.twist.filter, 'dimensionX', 0, 5000).onChange(cb);
-  folder.add(filters.twist.filter, 'dimensionY', 0, 5000).onChange(cb);
+    .add(filters.twist, 'random')
+    .listen()
+    .onChange((random: boolean) => {
+      filters.twist.random = random;
+      cb();
+    });
+
+  const { properties } = filters.twist;
+  if (properties) {
+    properties.forEach(({ key, max, min, step }) => {
+      const guiController = folder.add(filters.twist.filter, key, min, max).listen();
+      if (step != null) {
+        guiController.step(step);
+      }
+      guiController.onChange(cb);
+    });
+  }
 }
 
 class Main {
@@ -388,17 +583,26 @@ class Main {
 
   handleKeyPress(event: KeyboardEvent) {
     if (event.key === 'Enter') {
-      Object.values(filters).forEach(filter => (filter.enabled = false));
+      if (event.shiftKey) {
+        Object.values(filters).forEach(filter => (filter.random = false));
+      } else {
+        Object.values(filters).forEach(filter => (filter.enabled = false));
+      }
       this.updateFilters();
       return;
     }
 
-    const targetFilter = Object.values(filters).find(({ key }) => key === event.key);
+    const lowerKey = event.key.toLowerCase();
+    const targetFilter = Object.values(filters).find(({ key }) => key === lowerKey);
     if (!targetFilter) {
       return;
     }
 
-    targetFilter.enabled = !targetFilter.enabled;
+    if (event.shiftKey) {
+      targetFilter.random = !targetFilter.random;
+    } else {
+      targetFilter.enabled = !targetFilter.enabled;
+    }
     this.updateFilters();
   }
 
@@ -410,7 +614,10 @@ class Main {
     this.renderer.render(this.stage);
   }
 
-  setAnimation({ fps }: { fps: number } = { fps: 24 }): RequestAnimationFrameID {
+  setAnimation({ fps }: { fps: number } = { fps: 24 }) {
+    /*
+     * requestAnimationFrame pattern
+     */
     const startTime = performance.now();
     let lastFrame = 0;
     const loop = () => {
@@ -418,13 +625,22 @@ class Main {
       const frame = Math.ceil(timeDiff / (1000 / fps));
 
       if (lastFrame < frame) {
+        Object.values(filters)
+          .filter(({ enabled, random, properties }) => enabled && random && properties)
+          .forEach(({ filter, properties }) => {
+            if (!properties) {
+              return;
+            }
+            properties.forEach(({ key, min, max }) => {
+              const value = Math.floor((max - min) * Math.random());
+              (filter as any)[key] = value;
+              console.log(min, max, value);
+            });
+          });
         (filters.swell.filter as any).timer += 1;
         (filters.twist.filter as any).timer += 1;
-        // console.log('Animate', frame, lastFrame, timeDiff);
         lastFrame = frame;
         this.renderer.render(this.stage);
-      } else {
-        // console.log('Pass', frame, lastFrame, timeDiff);
       }
 
       requestAnimationFrame(loop);
@@ -506,7 +722,7 @@ class Main {
 
 window.addEventListener('DOMContentLoaded', () => {
   const main = new Main();
-  main.setAnimation();
+  // main.setAnimation();
   main.updateFilters();
 
   window.addEventListener('keypress', main.handleKeyPress.bind(main));
