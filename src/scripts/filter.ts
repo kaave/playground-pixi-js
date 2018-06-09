@@ -568,6 +568,8 @@ class Main {
             return;
           }
           context.drawImage(image, 0, 0);
+          this.sourceSelectElement.value = 'upload';
+          this.setTextureToStage(PIXI.Texture.fromCanvas(this.uploadImageCanvas));
         };
         image.src = event.target.result;
       };
