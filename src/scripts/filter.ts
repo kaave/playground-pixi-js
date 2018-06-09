@@ -29,6 +29,22 @@ interface Filter {
   properties?: Array<{ key: string; max: number; min: number; step?: number }>;
 }
 
+interface Images {
+  key: string;
+  url: string;
+  desc: string;
+}
+
+const images: Images[] = [
+  { key: 'woman', url: 'alex-iby-628881-unsplash.jpg', desc: 'Woman: Photo by Alex Iby on Unsplash' },
+  { key: 'woman2', url: 'stas-svechnikov-31192-unsplash.jpg', desc: 'Woman2: Photo by Stas Svechnikov on Unsplash' },
+  { key: 'man', url: 'shttefan-472897-unsplash.jpg', desc: 'Man: Photo by SHTTEFAN on Unsplash' },
+  { key: 'car', url: 'alan-king-581569-unsplash.jpg', desc: 'Car: Photo by alan King on Unsplash' },
+  { key: 'sea', url: 'anastasia-taioglou-214774-unsplash.jpg', desc: 'Sea: Photo by Anastasia Taioglou on Unsplash' },
+  { key: 'food', url: 'toa-heftiba-422022-unsplash.jpg', desc: 'Food: Photo by Toa Heftiba on Unsplash' },
+  { key: 'illust', url: 'monitor_tenin_nenrei_kakunin.png', desc: 'Illust: by Illust-ya' },
+];
+
 const filters: { [key: string]: Filter } = {
   redInvert: { enabled: false, key: 'q', filter: new RedInvert() },
   redRaise: { enabled: false, key: 'w', filter: new RedRaise() },
@@ -489,6 +505,24 @@ function setTwist(gui: dat.GUI, cb: () => void) {
   }
 }
 
+function setSourceList() {
+  const selectElement = document.querySelector('.Source__select');
+  if (!selectElement) {
+    return;
+  }
+
+  [
+    ...images.map(({ key, desc }) => ({ key: `preset-${key}`, desc: `Preset (${desc})` })),
+    { key: 'camera', desc: 'CAMERA *RECOMMENDED*' },
+    { key: 'upload', desc: 'Upload image' },
+  ].forEach(({ key, desc }) => {
+    const optionElement = document.createElement('option');
+    optionElement.value = key;
+    optionElement.innerText = desc;
+    selectElement.appendChild(optionElement);
+  });
+}
+
 class Main {
   renderer: PIXI.WebGLRenderer | PIXI.CanvasRenderer;
   stage: PIXI.Container;
@@ -497,6 +531,7 @@ class Main {
   uploadImageCanvas?: HTMLCanvasElement;
 
   constructor() {
+    setSourceList();
     this.updateFilters = this.updateFilters.bind(this);
     const sourceSelectElement = document.querySelector('.Source__select');
     const sourceFileElement = document.querySelector('.Source__file');
@@ -533,7 +568,6 @@ class Main {
             return;
           }
           context.drawImage(image, 0, 0);
-          console.log(this.uploadImageCanvas);
         };
         image.src = event.target.result;
       };
@@ -546,9 +580,7 @@ class Main {
     const gui = new dat.GUI({ hideable: false });
     gui.useLocalStorage = false;
 
-    PIXI.loader
-      .add([{ name: 'abstract', url: '1.jpg' }, { name: 'girl', url: '2.jpg' }, { name: 'view', url: '4.jpg' }])
-      .load(this.onImageLoad.bind(this));
+    PIXI.loader.add(images.map(({ key: name, url }) => ({ name, url }))).load(this.onImageLoad.bind(this));
     this.renderer.autoResize = true;
     document.body.appendChild(this.renderer.view);
 
@@ -634,7 +666,6 @@ class Main {
             properties.forEach(({ key, min, max }) => {
               const value = Math.floor((max - min) * Math.random());
               (filter as any)[key] = value;
-              console.log(min, max, value);
             });
           });
         (filters.swell.filter as any).timer += 1;
@@ -650,7 +681,7 @@ class Main {
   }
 
   onImageLoad() {
-    this.setTextureToStage(PIXI.loader.resources.girl.texture.clone());
+    this.setTextureToStage(PIXI.loader.resources.woman.texture.clone());
     this.renderer.render(this.stage);
   }
 
@@ -681,39 +712,29 @@ class Main {
 
   handleChangeSourceSelect() {
     this.stage.removeChildren();
-    switch (this.sourceSelectElement.value) {
-      case 'preset-girl':
-        this.setTextureToStage(PIXI.loader.resources.girl.texture.clone());
-        break;
-      case 'preset-view':
-        this.setTextureToStage(PIXI.loader.resources.view.texture.clone());
-        break;
-      case 'preset-abstract':
-        this.setTextureToStage(PIXI.loader.resources.abstract.texture.clone());
-        break;
-      case 'camera':
-        navigator.mediaDevices
-          .getUserMedia({ video: true, audio: false })
-          .then(stream => {
-            const url = window.URL.createObjectURL(stream);
-            const video = document.createElement('video');
-            video.src = url;
-            video.oncanplay = () => this.setTextureToStage(PIXI.Texture.fromVideo(video));
-            video.play();
-          })
-          .catch(error => {
-            console.error('mediaDevice.getUserMedia() error:', error);
-            return;
-          });
-        break;
-      case 'upload':
-        if (!this.uploadImageCanvas) {
-          break;
-        }
-        this.setTextureToStage(PIXI.Texture.fromCanvas(this.uploadImageCanvas));
-        break;
-      default:
-        break;
+
+    const matcher = this.sourceSelectElement.value.match(/^preset-(.+)/);
+    if (matcher) {
+      this.setTextureToStage(PIXI.loader.resources[matcher[1]].texture.clone());
+    } else if (this.sourceSelectElement.value === 'camera') {
+      navigator.mediaDevices
+        .getUserMedia({ video: true, audio: false })
+        .then(stream => {
+          const url = window.URL.createObjectURL(stream);
+          const video = document.createElement('video');
+          video.src = url;
+          video.oncanplay = () => this.setTextureToStage(PIXI.Texture.fromVideo(video));
+          video.play();
+        })
+        .catch(error => {
+          console.error('mediaDevice.getUserMedia() error:', error);
+          return;
+        });
+    } else if (this.sourceSelectElement.value === 'upload') {
+      if (!this.uploadImageCanvas) {
+        return;
+      }
+      this.setTextureToStage(PIXI.Texture.fromCanvas(this.uploadImageCanvas));
     }
 
     this.renderer.render(this.stage);
