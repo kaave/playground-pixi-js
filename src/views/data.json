@@ -21,11 +21,10 @@
         "ga": "__GA__"
     },
     "filter": {
-        "title": "slice",
-        "description": "This is top page",
+        "title": "pixi glitch",
+        "description": "pixi glitch sample",
         "styles": ["/css/index.css"],
-        "scripts": ["/js/filter.js"],
-        "metaImage": "https://dummyimage.com/600x400/333/ddd.png&text=Dummy+image"
+        "scripts": ["/js/filter.js"]
     },
     "slice": {
         "title": "slice",
