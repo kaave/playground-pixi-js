@@ -26,7 +26,7 @@ class Main {
     this.animationReverse = false;
 
     const spriteWidth = this.renderer.width / sliceLength;
-    PIXI.loader.add({ name: 'unsplash', url: '2.jpg' }).load(() => {
+    PIXI.loader.add({ name: 'unsplash', url: 'alex-iby-628881-unsplash.jpg' }).load(() => {
       const container = new PIXI.Container();
       const resource = PIXI.loader.resources.unsplash;
       console.log(resource.texture.width, resource.texture.height);
