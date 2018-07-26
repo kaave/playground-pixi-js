@@ -11,6 +11,8 @@ const paths = {
 };
 paths.lib = path.join(paths.assets, 'lib');
 
+const viewData = require(path.join(paths.view, '/data.json'));
+
 const imageMin = {
   png: {
     // クオリティ 0(やり過ぎ) ~ 100(ほぼそのまま) -で繋いで2つ書くとmin-maxという意味合いらしいがよくわかりません
@@ -65,14 +67,14 @@ module.exports = {
         loader: 'awesome-typescript-loader',
       },
       {
-        test: /\.hbs$/,
-        loader: 'handlebars-loader',
-        options: {
-          helperDirs: path.join(paths.view, 'helpers'),
-          precompileOptions: {
-            knownHelpersOnly: false,
-          }
-        },
+        test: /\.ejs$/,
+        use: [
+          'html-loader',
+          {
+            loader: 'ejs-html-loader',
+            options: { ...viewData, isProduction: process.env.NODE_ENV === 'production' },
+          },
+        ],
       },
       {
         test: /\.(jpg|png|gif)$/,
@@ -120,10 +122,11 @@ module.exports = {
   paths,
   imageMin,
   views: globby.sync([
-    path.join(paths.view, '**', '*.hbs'),
-    path.join('!', paths.view, '**', '_*.hbs'),
+    path.join(paths.view, '**', '*.ejs'),
+    path.join('!', paths.view, '**', '_*.ejs'),
   ]).map(template => ({
     template,
-    filename: template.replace(`${paths.view}/`, '').replace(/\.hbs$/, ''),
+    filename: template.replace(`${paths.view}/`, '').replace(/\.ejs$/, ''),
   })),
+  viewData,
 };

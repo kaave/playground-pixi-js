@@ -6,8 +6,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const imageminMozjpeg = require('imagemin-mozjpeg');
 
-const { entry, output, resolve, module: { rules }, plugins, views, paths, imageMin } = require('./base');
-const viewData = require(path.join(paths.view, '/data.json'));
+const { entry, output, resolve, module: { rules }, plugins, views, paths, imageMin, viewData } = require('./base');
 
 const appendRules = [
   {

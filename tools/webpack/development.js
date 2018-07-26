@@ -50,7 +50,7 @@ module.exports = {
         host: 'localhost',
         port: 3000,
         files: [
-          'src/views/**/*.hbs',
+          'src/views/**/*.ejs',
           'assets/**/*',
         ],
         proxy: 'http://localhost:13000',
