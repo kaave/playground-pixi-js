@@ -15,16 +15,15 @@ function loadDOM() {
 }
 
 Promise.all([loadImages(), loadDOM()]).then(() => {
-  const renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight);
-  const stage = new PIXI.Container();
+  const app = new PIXI.Application(window.innerWidth, window.innerHeight);
+  const { renderer, stage } = app;
   renderer.autoResize = true;
   const { texture } = PIXI.loader.resources.unsplash;
 
   const sprite = new PIXI.Sprite(texture);
   sprite.position.set(0, 0);
   sprite.texture.frame = new PIXI.Rectangle(0, 0, texture.width, texture.height);
-
   stage.addChild(sprite);
-  renderer.render(stage);
+
   document.body.appendChild(renderer.view);
 });
