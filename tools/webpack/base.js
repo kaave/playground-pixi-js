@@ -41,6 +41,7 @@ const entry = {
   index: path.join(paths.script, 'index.ts'),
   filter: path.join(paths.script, 'filter.ts'),
   slice: path.join(paths.script, 'slice.ts'),
+  '2018-09-08': path.join(paths.script, '2018-09-08.ts'),
 };
 
 module.exports = {
